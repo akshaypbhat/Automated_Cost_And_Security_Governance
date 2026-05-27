@@ -21,7 +21,7 @@ The dual-engine framework operates entirely via a serverless topology, optimizin
 |                                                                                   |
 |   +---------------------------------------+   +-------------------------------+   |
 |   |         FINOPS COST GOVERNANCE        |   |    SECOPS SECURITY GUARDRAIL  |   |
-|   |  • Idle EC2   • Unattached EBS Volumes |   |  • Open SSH/22  • Public S3   |   |
+|   |  • Idle EC2   • Unattached EBS Volumes |  |  • Open SSH/22  • Public S3   |   |
 |   |  • Stale EBS Snapshots                |   |  • Missing Public Access Block|   |
 |   +-------------------+-------------------+   +---------------+---------------+   |
 |                       |                                       |                   |
