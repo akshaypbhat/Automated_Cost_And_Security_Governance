@@ -1,76 +1,71 @@
-# Automated AWS Cost & Security Guardrail Framework
+# AWS Enterprise Cloud Governance & Security Guardrail Framework
 
 [![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white)](https://aws.amazon.com/)
 [![Terraform](https://img.shields.io/badge/terraform-%235C4EE5.svg?style=for-the-badge&logo=terraform&logoColor=white)](https://www.terraform.io/)
 [![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)](https://www.python.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
 
-An enterprise-grade, cloud-native automated auditing framework designed to enforce security compliance and cost optimization governance across AWS infrastructure. Built using **Terraform** for reproducible Infrastructure as Code (IaC) and **Python (Boto3)** for event-driven serverless runtime orchestration.
+A production-grade, dual-engine automation framework designed to enforce strict **FinOps Cost Optimization** and **SecOps Security Guardrails** across AWS cloud environments. Engineered using **Terraform** for reproducible Infrastructure as Code (IaC) and **Python (Boto3)** for event-driven, serverless execution.
 
-This framework proactively scans AWS environments to detect critical security vulnerabilities (publicly exposed administrative ports) and cost/compliance leaks (unprotected public S3 buckets), delivering formatted real-time notifications to infrastructure teams via Amazon SNS and SES.
+This framework actively mitigates corporate cloud risks by simultaneously eliminating silent billing leaks (orphaned volumes, unattached snapshots, idle instances) and shutting down dangerous perimeter vulnerabilities (publicly open administrative ports, unshielded S3 storage buckets). Real-time, formatted tabular executive alerts are delivered straight to infrastructure teams via Amazon SNS and SES.
 
 ---
 
 ## 🏗️ System Architecture
 
-The framework leverages a completely serverless design to eliminate operational overhead while maintaining a continuous compliance posture.
+The dual-engine framework operates entirely via a serverless topology, optimizing runtime execution costs while maintaining an active continuous governance posture across multi-module storage and network layers.
 
 ```
-+------------------------------------------------------------------------+
-|                              AWS Cloud                                 |
-|                                                                        |
-|   +-------------------+        +--------------------+                  |
-|   |  EC2 Workloads    |        | S3 Storage Buckets |                  |
-|   |  (Security Groups)|        | (Public Access)    |                  |
-|   +---------+---------+        +---------+----------+                  |
-|             |                            |                             |
-|             +------------+  +------------+                             |
-|                          |  |                                          |
-|                          v  v                                          |
-|                +-----------------------+                               |
-|                |   AWS Lambda          | <--- State/Package managed    |
-|                |   (Python / Boto3)    |      via Terraform            |
-|                +-----------+-----------+                               |
-|                            |                                           |
-|                            v                                           |
-|                +-----------------------+                               |
-|                |   Amazon SNS / SES    |                               |
-|                |   (Alert Dispatcher)  |                               |
-|                +-----------+-----------+                               |
-|                            |                                           |
-+----------------------------|-------------------------------------------+
-                             v
-                  +---------------------+
-                  |  SecOps Inbox       |
-                  |  (HTML Report)      |
-                  +---------------------+
++-----------------------------------------------------------------------------------+
+|                                     AWS Cloud                                     |
+|                                                                                   |
+|   +---------------------------------------+   +-------------------------------+   |
+|   |         FINOPS COST GOVERNANCE        |   |    SECOPS SECURITY GUARDRAIL  |   |
+|   |  • Idle EC2   • Unattached EBS Volumes |   |  • Open SSH/22  • Public S3   |   |
+|   |  • Stale EBS Snapshots                |   |  • Missing Public Access Block|   |
+|   +-------------------+-------------------+   +---------------+---------------+   |
+|                       |                                       |                   |
+|                       +-------------------+-------------------+                   |
+|                                           |                                       |
+|                                           v                                       |
+|                               +-----------------------+                           |
+|                               |   AWS Lambda Runtime  | <--- Stateful Packages    |
+|                               |    (Python / Boto3)   |      via Terraform Engine |
+|                               +-----------+-----------+                           |
+|                                           |                                       |
+|                                           v                                       |
+|                               +-----------------------+                           |
+|                               |   Amazon SNS / SES    |                           |
+|                               |   (Alert Dispatcher)  |                           |
+|                               +-----------+-----------+                           |
+|                                           |                                       |
++-------------------------------------------|---------------------------------------+
+                                            v
+                               +-------------------------+
+                               | Dual SecOps & FinOps    |
+                               | Combined HTML Report    |
+                               +-------------------------+
 ```
 
-### Key Architectural Components:
-* **Infrastructure as Code (IaC):** Modular Terraform configuration enforcing automated ZIP packaging (`data.archive_file`), cryptographic state-hashing (`source_code_hash`), and strict IAM execution roles following the **Principle of Least Privilege**.
-* **Serverless Execution Layer:** AWS Lambda runtime optimized on Python 3.11 utilizing highly decoupled Boto3 API client handlers.
-* **Notification Engine:** Multi-target alert bus combining AWS SNS protocols and custom-styled AWS SES HTML transitional payloads for rapid human triage.
+### Key Architectural Highlights:
+* **Infrastructure as Code (IaC):** Modular Terraform codebase implementing advanced automation mechanisms like `data.archive_file` blocks for runtime zipping and `source_code_hash` mapping for secure, drift-free deployment updates.
+* **Serverless Execution Engine:** Decoupled Python 3.11 Lambda handlers optimized to consume minimal compute footprints while performing deep multi-service API interrogation via `boto3`.
+* **Enterprise Alerting Fabric:** Configured using multi-protocol Amazon SNS alerting backed by highly customized, executive-ready HTML transaction rendering via Amazon SES.
 
 ---
 
-## ⚡ Core Capabilities & Guardrails
+## ⚡ Core Engines Breakdown
 
-### 1. Network Perimeter Security Guardrail
-* **The Risk:** Open ingress rules allowing unrestricted global traffic (`0.0.0.0/0`) to management ports expose infrastructure to automated brute-force attacks and malicious network scanning.
-* **The Logic:** Evaluates all EC2 Security Groups dynamically. Isolates, flags, and records any rule permitting open internet ingress over administrative ports (specifically **Port 22 / SSH**).
+### 💰 Engine A: FinOps Cost Governance
+Corporate cloud waste typically accumulates from orphaned storage elements. This engine programmatically executes systemic cleanups by interrogating the `ec2` and `ebs` block-storage virtualization layers:
+* **Unattached EBS Volumes:** Traces volumes lingering in an `available` state rather than `in-use`, mapping idle assets bleeding daily provisioned storage costs.
+* **Orphaned EBS Snapshots:** Cross-references active volume architectures against older snapshots to flag detached backup allocations that no longer map to running company hardware.
+* **Idle EC2 Workloads:** Evaluates instance states to track unutilized instances that consume budget without processing live application traffic.
 
-### 2. S3 Storage Compliance Guardrail
-* **The Risk:** Unconfigured or explicitly disabled public access blocks on S3 buckets represent one of the leading causes of corporate data leaks.
-* **The Logic:** Programmatically queries the S3 API service fabric across the environment. Interrogates the target bucket's `PublicAccessBlockConfiguration` structure via `get_public_access_block`.
-* **Compliance Evaluation Criteria:** Captures and reports buckets missing critical configurations:
-    * `BlockPublicAcls`
-    * `IgnorePublicAcls`
-    * `BlockPublicPolicy`
-    * `RestrictPublicBuckets`
-
-### 3. Unified Executive Alert Delivery
-* Consolidates findings into a single execution context to prevent alert fatigue.
-* Compiles raw JSON security payloads into an intuitive, high-visibility HTML email summary containing structured tabular markdown of exposed Asset IDs, resource metadata, and explicit configuration vulnerabilities.
+### 🔒 Engine B: SecOps Security Guardrails
+Perimeter security is non-negotiable. This engine acts as an automated perimeter firewall auditor by continuously evaluating resource exposure profiles:
+* **Network Perimeter Ingress Guardrail:** Targets critical infrastructure vulnerabilities by identifying any EC2 Security Group permitting open ingress traffic (`0.0.0.0/0`) over management channels, specifically focusing on **Port 22 (SSH)** to block brute-force vectors.
+* **S3 Data Leak Prevention Guardrail:** Scans environment storage buckets via the S3 client API fabric. It directly interrogates the `PublicAccessBlockConfiguration` structure via the `get_public_access_block` endpoint, flagging any bucket with deactivated or missing safety attributes (`BlockPublicAcls`, `IgnorePublicAcls`, `BlockPublicPolicy`, `RestrictPublicBuckets`).
 
 ---
 
@@ -80,21 +75,21 @@ The framework leverages a completely serverless design to eliminate operational 
 Automated_Cost_Optimisation/
 │
 ├── src/
-│   ├── cost_governance/           # Extensible module for cost hooks
-│   │   ├── emails.py
-│   │   ├── instances.py
-│   │   ├── lambda_function.py
-│   │   ├── snapshots.py
-│   │   └── volumes.py
+│   ├── cost_governance/           # ENGINE A: Cost Architecture Subsystem
+│   │   ├── emails.py              # FinOps custom report formatting
+│   │   ├── instances.py           # EC2 idle metrics processor
+│   │   ├── lambda_function.py     # Cost core logic coordinator
+│   │   ├── snapshots.py           # Orphaned snapshot mapping engine
+│   │   └── volumes.py             # Idle EBS volume identifier
 │   │
-│   └── security_guardrails/       # Operational Guardrail Subsystem
-│       └── lambda_function.py     # Main Boto3 compliance evaluation script
+│   └── security_guardrails/       # ENGINE B: Security Guardrails Subsystem
+│       └── lambda_function.py     # SecOps S3 and Security Group compliance scanning
 │
-├── Main.tf                        # Primary AWS resource mapping (Lambda, IAM, SNS)
-├── Providers.tf                   # Terraform Provider constraints & AWS configurations
-├── Variables.tf                   # Strong-typed input parameters
-├── terraform.tfvars               # Deployment environments workspace variables
-└── README.md                      # Professional technical documentation
+├── Main.tf                        # Unified Infrastructure mapping (Lambda, IAM, SNS, SES)
+├── Providers.tf                   # Version-locked Cloud Provider rules
+├── Variables.tf                   # Strictly-typed global workspace inputs
+├── terraform.tfvars               # Production deployment context parameters
+└── README.md                      # High-impact documentation storefront
 ```
 
 ---
@@ -102,77 +97,60 @@ Automated_Cost_Optimisation/
 ## 🚀 Deployment & Installation
 
 ### Prerequisites
-* [Terraform CLI](https://developer.hashicorp.com/terraform/downloads) (v1.5.0+)
-* [AWS CLI](https://aws.amazon.com/cli/) configured with appropriate administrative execution credentials.
-* Verified Sender Identity in **AWS SES** for both the target sender and recipient addresses.
+* **Terraform CLI** (v1.5.0+) installed and path-configured.
+* **AWS CLI** authenticated with administrative IAM workspace permissions.
+* Verified Identities established within the **Amazon SES** dashboard for secure transmission.
 
-### Step 1: Clone the Repository
+### Provisioning Pipeline
 ```bash
+# 1. Clone the project workspace
 git clone https://github.com/your-username/automated-cost-security-guardrail.git
 cd automated-cost-security-guardrail
-```
 
-### Step 2: Configure Environment Variables
-Create or modify the `terraform.tfvars` file to supply the required deployment context parameters:
-```hcl
-sender_email    = "security-alerts@yourdomain.com"
-recipient_email = "secops-triage@yourdomain.com"
-aws_region      = "us-east-1"
-```
-
-### Step 3: Initialize Terraform Provider Plugins
-Download provider plugins, construct local working state data, and ensure version constraints are lock-verified.
-```bash
+# 2. Initialize provider frameworks and cache lock profiles
 terraform init
-```
 
-### Step 4: Validate Configuration Integrity
-Execute syntactic and structural checks across the custom HCL scripts.
-```bash
+# 3. Validate codebase syntax and configuration schema
 terraform validate
-```
 
-### Step 5: Provision Infrastructure
-Review the execution blueprint and apply changes to the live AWS provider instance.
-```bash
+# 4. Generate deployment blueprint and provision live resources
 terraform apply
 ```
 
 ---
 
-## 🧪 Operational Testing & Verification
+## 🧪 Verification & Executive Report Mock
 
-Once provisioned by Terraform, the compliance engine can be validated directly within the AWS Console or via AWS CLI:
-
-1.  **Generate a Synthetic Breach Matrix:**
-    * Create a temporary EC2 Security Group containing an ingress rule opening Port `22` to `0.0.0.0/0`.
-    * Provision an S3 Bucket with public access blocks explicitly disabled or left unconfigured.
-2.  **Execute the Auditor:** Trigger the Lambda function via a blank test payload (`{}`).
-3.  **Verify Results:** Monitor your designated triage email inbox. The framework will instantly dispatch a formatted executive summary detailing the exact out-of-compliance resources:
+When executed, the system consolidates compliance checks into a clean, easy-to-read executive dashboard layout:
 
 ```text
-🚨 Security Guardrail Alert
-The automated security scanner identified infrastructure resources exposed to the public internet.
+========================================================================
+📊 CLOUD GOVERNANCE & SECURITY AUDIT SUMMARY
+========================================================================
 
-🔒 Exposed EC2 Security Groups
-------------------------------------------------------------
-| Group ID              | Group Name       | Exposure     |
-------------------------------------------------------------
-| sg-017614162b0d10c3d  | launch-wizard-2  | Port 22 Open |
-------------------------------------------------------------
+💰 FINOPS COST GOVERNANCE FINDINGS
+------------------------------------------------------------------------
+| Resource Type | Resource ID           | Size/State  | Financial Risk |
+------------------------------------------------------------------------
+| EBS Volume    | vol-0a12b34567cd89ef0 | 100 GiB     | Idle Waste     |
+| EBS Snapshot  | snap-0987654321fedcba | Stale       | Orphaned Leak  |
+------------------------------------------------------------------------
 
-🪣 Non-Compliant S3 Buckets
-------------------------------------------------------------
-| Bucket Name                           | Exposure        |
-------------------------------------------------------------
-| testingpurposebucketfordemopurpose    | PAB Disabled    |
-------------------------------------------------------------
+🔒 SECOPS SECURITY GUARDRAIL BREACHES
+------------------------------------------------------------------------
+| Resource Type | Resource ID           | Vulnerability| Threat Level  |
+------------------------------------------------------------------------
+| Security Group| sg-017614162b0d10c3d  | Port 22 Open | CRITICAL      |
+| S3 Bucket     | demobucket-production | PAB Disabled | HIGH RISK     |
+------------------------------------------------------------------------
+
+Action Required: Please remediate flagged configurations via the AWS Console immediately.
 ```
 
 ---
 
-## 🛠️ Technical Implementation Highlights
+## 🛠️ Engineering Implementation Highlights
 
-* **State Integrity & Drift Prevention:** Utilizes `source_code_hash = data.archive_file.security_guardrail_zip.output_base64sha256` to ensure that any local changes made to Python business logic are mathematically matched, zipped, and forced updated on subsequent code applies.
-* **Robust Exception Processing:** Built defensive exception structures around AWS API endpoints using specific `botocore.exceptions.ClientError` wrappers. This prevents script failures if individual resources are deleted mid-scan or when querying unconfigured API structures (such as S3 buckets completely lacking a PAB config block).
-* **Clean Architecture:** Employs explicit separation of concerns by breaking down code spaces into functional configuration blocks (`Providers.tf`, `Variables.tf`, `Main.tf`) and separate application resource directories (`src/`).
+* **Cryptographic State Integrity:** Configured with `source_code_hash = data.archive_file.security_guardrail_zip.output_base64sha256` to force immediate code upgrades anytime a local Python file is updated, completely removing structural drift.
+* **Defensive Exception Engineering:** Implements strict try-except closures wrapped in `botocore.exceptions.ClientError` signatures to prevent execution thread crashes when evaluating buckets lacking explicit configurations.
+* **Decoupled Structural Design:** Enforces strict compliance with enterprise separation patterns, splitting state declarations (`Main.tf`) cleanly away from pure functional computational logic units (`src/`).
